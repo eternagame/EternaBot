@@ -13,15 +13,35 @@ import simplejson
 class Ensemble:
 	def __init__(self, strategy_names, weights):
 		try:
-			fw = open("weights.txt", "r")
-			fs = open("strategies.txt", "r")
-
+			fw = open("strategies/weights.txt", "r")
 			self.my_weights_ = simplejson.loads(fw.read())
-			self.strategies_ = simplejson.loads(fs.read())
-
 			fw.close()
+
+			fs = open("strategies/strategies.txt", "r")
+			strategy_stored_names = simplejson.loads(fs.read())
 			fs.close()
+
+			fn = open("strategies/normalized/mean.txt", "r")
+			self.scores_mean_ = simplejson.loads(fn.read())
+			fn.close()
 			
+			fst = open("strategies/normalized/stdev.txt", "r")
+			self.scores_stdev_ = simplejson.loads(fst.read())
+			fst.close()
+
+			if strategy_names != strategy_stored_names:
+				raise IOError
+				
+			strategies = []
+
+			for i in range(0, len(strategy_stored_names)):
+				strategy = eterna_utils.load_strategy_from_file('strategies/' + strategy_stored_names[i] + ".py")
+				strategy.load_opt_params()
+				strategy.get_normalization(strategy.default_params_, "strategies/normalized/" + strategy_stored_names[i] + "_mean.txt", "strategies/normalized/" + strategy_stored_names[i] + "_stdev.txt")
+				strategies.append(strategy)
+
+			self.strategies_ = strategies
+	
 		except IOError:
 			designs = eterna_utils.get_synthesized_designs_from_eterna_server(True)
 			scores_mean = designs[0]['normalize_mean']
@@ -30,16 +50,17 @@ class Ensemble:
 			self.designs_ = designs
 			self.scores_mean_ = scores_mean
 			self.scores_stdev_ = scores_stdev
-			
+		
 			strategies = []
 						
 			for ii in range(0,len(strategy_names)):
 				strategy = eterna_utils.load_strategy_from_file('strategies/' + strategy_names[ii] + ".py")
 				strategy.load_opt_params()
-				strategy.set_normalization(designs,strategy.default_params_)
+				strategy.set_normalization(designs, strategy.default_params_, "strategies/normalized/" + strategy_names[ii] + "_mean.txt", "strategies/normalized/" + strategy_names[ii] + "_stdev.txt")
 				strategies.append(strategy)
 
 			my_weights = []
+			
 			# Sparse 
 			if(weights):
 				my_weights_walker = 0
@@ -89,7 +110,7 @@ class Ensemble:
 					for ss in range(0,len(strategies)):			
 						f_score =  strategies[ss].normalized_score(designs[ii],strategies[ss].default_params_)
 						my_feature_vector.append(f_score)
-							
+
 					my_feature_vector.append(1.0)
 					my_feature_array.append(my_feature_vector)	
 					my_scores_array.append([designs[ii]['score']])
@@ -121,15 +142,21 @@ class Ensemble:
 				for ii in range(0,len(strategies)+1):
 					my_weights.append(float(tempi[ii][0]))
 
-			fw = open("weights.txt", "w")
-			fs = open("strategies.txt", "w")
+			fw = open("strategies/weights.txt", "w")
+			fs = open("strategies/strategies.txt", "w")
+			fn = open("strategies/normalized/mean.txt", "w")
+			fst = open("strategies/normalized/stdev.txt", "w")
 
 			fw.write(simplejson.dumps(my_weights))
-			fs.write(simplejson.dumps(strategies))
+			fs.write(simplejson.dumps(strategy_names))
+			fn.write(simplejson.dumps(scores_mean))
+			fst.write(simplejson.dumps(scores_stdev))
 
 			fw.close()
 			fs.close()
-	
+			fn.close()
+			fst.close()
+
 			self.my_weights_ = my_weights
 			self.strategies_ = strategies	
 					

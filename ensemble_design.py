@@ -29,6 +29,10 @@ def initial_sequence_with_gc_caps(secstruct, sequence_constraints, no_gccap):
 		if(pairmap[ii] > ii):
 			pair_count += 1
 			is_cap = False
+			
+			if(ii == 0):
+				is_cap = True
+
 			if(ii > 0 and pairmap[ii-1] < 0):
 				is_cap = True
 			if(ii < n-1 and pairmap[ii+1] <0):
@@ -76,11 +80,8 @@ def initial_sequence_with_gc_caps(secstruct, sequence_constraints, no_gccap):
 	string_sequence = ""
 	for ii in range(0,n):
 		string_sequence += sequence[ii]
-			
-	return string_sequence
 	
-
-
+	return string_sequence
 
 def get_random_base():
 	#bases = "GAUGCG"
@@ -107,7 +108,6 @@ def get_sequence_string(arr):
 		string += arr[ii]
 	
 	return string
-
 
 def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cutoff):
 	
@@ -148,7 +148,6 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
 	walk_iter = 0
 	stale_move = 0
 
-
 	best_sequence = sequence
 	best_bp_distance = bp_distance
 	best_native = native
@@ -156,7 +155,6 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
 	best_design = design
 	best_design_score = design_score
 	
-
 	index_array = []
 	for ii in range(0,n):
 		if(constraints[ii] == "N"):
@@ -246,9 +244,8 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
 
 			stale_move += 1
 			
-			if(stale_move > 400):
+			if(stale_move > 100):
 				return [best_sequence, best_bp_distance, best_design_score['finalscore'], best_design_score]
-			
 			
 			rand = random.random()
 			
@@ -285,11 +282,9 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
 		moved == False
 		walk_iter += 1
 		
-		
-		if(walk_iter > 1600):
+		if(walk_iter > 400):
 			return [best_sequence, best_bp_distance, best_design_score['finalscore'], best_design_score]
 	
-
 	return [best_sequence, best_bp_distance, best_design_score['finalscore'], best_design_score]				
 	
 	
@@ -301,20 +296,29 @@ def inverse_fold_whole(secstruct, constraints, score_func, score_cutoff, convent
 	start_design = eterna_utils.get_design_from_sequence(start_sequence, secstruct)
 
 	res = {}
-	res['initial'] = [start_sequence, start_bp, score_func(start_design)]	
+	res['initial'] = [start_sequence, start_bp, score_func(start_design)]
+	
+	flag = 0
 
-	start_sequence_array = get_sequence_array(start_sequence)
-	elements = eterna_utils.get_rna_elements_from_secstruct(secstruct)
-	root = elements[0]
-	inverse_fold_recursive(root,secstruct,start_sequence_array, constraints,score_func,score_cutoff)
-	
-	end_sequence = get_sequence_string(start_sequence_array)
-	end_design = eterna_utils.get_design_from_sequence(end_sequence, secstruct)
-	end_native = inv_utils.fold(end_sequence)[0]
-	end_bp = eterna_utils.bp_distance(end_native,secstruct)
-	
-	res['end'] = [end_sequence, end_bp, score_func(end_design)]
-	
+	for i in range(0, len(constraints)):
+		if constraints[i] != 'N':
+			flag = 1
+			break
+
+	if flag == 0:
+		res['end'] = [start_sequence, start_bp, score_func(start_design)]	
+	else:
+		start_sequence_array = get_sequence_array(start_sequence)
+		elements = eterna_utils.get_rna_elements_from_secstruct(secstruct)
+		root = elements[0]
+		inverse_fold_recursive(root,secstruct,start_sequence_array, constraints,score_func,score_cutoff)
+		
+		end_sequence = get_sequence_string(start_sequence_array)
+		end_design = eterna_utils.get_design_from_sequence(end_sequence, secstruct)
+		end_native = inv_utils.fold(end_sequence)[0]
+		end_bp = eterna_utils.bp_distance(end_native,secstruct)
+
+		res['end'] = [end_sequence, end_bp, score_func(end_design)]
 	return res
 	
 def inverse_fold_recursive(root,secstruct,sequence_array,constraints,score_func,score_cutoff):
@@ -335,20 +339,16 @@ def inverse_fold_recursive(root,secstruct,sequence_array,constraints,score_func,
 		root_end_index = root.indices_[1]
 		
 	#print "RR %d %d %s" % (root_start_index, root_end_index, str(root.indices_))
-	
+
 	res = inverse_fold(secstruct[root_start_index:root_end_index+1], sequence[root_start_index:root_end_index+1], constraints[root_start_index:root_end_index+1], score_func, score_cutoff)
 	res_sequence = res[0]
 	
 	for ii in range(root_start_index, root_end_index+1):
 		sequence_array[ii] = res_sequence[ii-root_start_index]
 
-
-
-
-
-
 #JEEFIX for conventional
 strategy_names = ['merryskies_only_as_in_the_loops', 'aldo_repetition', 'dejerpha_basic_test', 'eli_blue_line', 'clollin_gs_in_place', 'quasispecies_test_by_region_boundaries', 'eli_gc_pairs_in_junction', 'eli_no_blue_nucleotides_in_hook', 'mat747_31_loops', 'merryskies_1_1_loop', 'xmbrst_clear_plot_stack_caps_and_safe_gc', 'jerryp70_jp_stratmark', 'eli_energy_limit_in_tetraloops', 'eli_double_AUPair_strategy', 'eli_green_blue_strong_middle_half', 'eli_loop_pattern_for_small_multiloops', 'eli_tetraloop_similarity', 'example_gc60', 'penguian_clean_dotplot', 'eli_twisted_basepairs', 'aldo_loops_and_stacks', 'eli_direction_of_gc_pairs_in_multiloops_neckarea', 'eli_multiloop_similarity', 'eli_green_line', 'ding_quad_energy', 'quasispecies_test_by_region_loops', 'berex_berex_loop_basic', 'eli_legal_placement_of_GUpairs', 'merryskies_1_1_loop_energy', 'ding_tetraloop_pattern', 'aldo_mismatch', 'eli_tetraloop_blues', 'eli_red_line', 'eli_wrong_direction_of_gc_pairs_in_multiloops', 'deivad_deivad_strategy', 'eli_direction_of_gc_pairs_in_multiloops', 'eli_no_blue_nucleotides_strategy', 'berex_basic_test', 'eli_numbers_of_yellow_nucleotides_pr_length_of_string', 'kkohli_test_by_kkohli']
+
 score_cutoff = 90
 
 secstructs  = [sys.argv[3]]
@@ -357,6 +357,11 @@ repeat      = int(sys.argv[5])
 puzzle_titles = ["FMN Aptamer"]
 
 op = sys.argv[1]
+
+if len(secstructs) <= 50:
+	score_cutoff = 70
+elif len(secstructs) <= 80:
+	score_cutoff = 80
 
 if op == "L2":
 	weights_file_name = "no_validation_training/weights_L2.overall.txt"

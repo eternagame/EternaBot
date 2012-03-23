@@ -2,8 +2,10 @@ import eterna_utils
 import test_utils
 import sys
 import math
+import json
+import simplejson
 
-class Strategy:
+class Strategy(json.JSONEncoder):
 	def __init__(self):
 		self.title_ = ""
 		self.author_ = ""
@@ -94,8 +96,17 @@ class Strategy:
 			print "Failed to load kt score - score file does not exist"
 			return False
 
-	def set_normalization(self,designs,params):
-		
+	def get_normalization(self, params, fm_fn, fs_fn):
+		fm = open(fm_fn, "r");
+		fs = open(fs_fn, "r");
+
+		self.mean_ = simplejson.loads(fm.read())
+		self.stdev_ = simplejson.loads(fs.read())
+
+		fm.close()
+		fs.close()
+
+	def set_normalization(self, designs, params, fm_fn, fs_fn):
 		scores = []
 		scoresum = 0
 		n = 0
@@ -121,9 +132,18 @@ class Strategy:
 		
 		stdev = math.sqrt(stdev)	
 		
+		fm = open(fm_fn, "w")
+		fs = open(fs_fn, "w")
+
+		fm.write(simplejson.dumps(mean))
+		fs.write(simplejson.dumps(stdev))
+
+		fm.close()
+		fs.close()
+
 		self.mean_ = mean
 		self.stdev_ = stdev
-		
+	
 		#print "MS %s %f %f" % (self.title_, self.mean_, self.stdev_)
 
 	def normalized_score(self, design,params):
@@ -141,4 +161,7 @@ class Strategy:
 		return 0
 	
 	def patch(self, design, params):
-		return None	 
+		return None
+
+	def get_title(self, obj):
+		return self.title_
