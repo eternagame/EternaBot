@@ -96,9 +96,9 @@ class Strategy(json.JSONEncoder):
 			print "Failed to load kt score - score file does not exist"
 			return False
 
-	def get_normalization(self, params, fm_fn, fs_fn):
-		fm = open(fm_fn, "r");
-		fs = open(fs_fn, "r");
+	def get_normalization(self, params, strategy_name):
+		fm = open("strategies/normalized/" + strategy_name + "_mean.txt", "r");
+		fs = open("strategies/normalized/" + strategy_name + "_stdev.txt", "r");
 
 		self.mean_ = simplejson.loads(fm.read())
 		self.stdev_ = simplejson.loads(fs.read())
@@ -106,7 +106,7 @@ class Strategy(json.JSONEncoder):
 		fm.close()
 		fs.close()
 
-	def set_normalization(self, designs, params, fm_fn, fs_fn):
+	def set_normalization(self, designs, params, strategy_name):
 		scores = []
 		scoresum = 0
 		n = 0
@@ -132,8 +132,8 @@ class Strategy(json.JSONEncoder):
 		
 		stdev = math.sqrt(stdev)	
 		
-		fm = open(fm_fn, "w")
-		fs = open(fs_fn, "w")
+		fm = open("strategies/normalized/" + strategy_name + "_mean.txt", "w")
+		fs = open("strategies/normalized/" + strategy_name + "_stdev.txt", "w")
 
 		fm.write(simplejson.dumps(mean))
 		fs.write(simplejson.dumps(stdev))

@@ -37,7 +37,7 @@ class Ensemble:
 			for i in range(0, len(strategy_stored_names)):
 				strategy = eterna_utils.load_strategy_from_file('strategies/' + strategy_stored_names[i] + ".py")
 				strategy.load_opt_params()
-				strategy.get_normalization(strategy.default_params_, "strategies/normalized/" + strategy_stored_names[i] + "_mean.txt", "strategies/normalized/" + strategy_stored_names[i] + "_stdev.txt")
+				strategy.get_normalization(strategy.default_params_, strategy_stored_names[i])
 				strategies.append(strategy)
 
 			self.strategies_ = strategies
@@ -56,7 +56,7 @@ class Ensemble:
 			for ii in range(0,len(strategy_names)):
 				strategy = eterna_utils.load_strategy_from_file('strategies/' + strategy_names[ii] + ".py")
 				strategy.load_opt_params()
-				strategy.set_normalization(designs, strategy.default_params_, "strategies/normalized/" + strategy_names[ii] + "_mean.txt", "strategies/normalized/" + strategy_names[ii] + "_stdev.txt")
+				strategy.set_normalization(designs, strategy.default_params_, strategy_names[ii])
 				strategies.append(strategy)
 
 			my_weights = []
