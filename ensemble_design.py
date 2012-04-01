@@ -23,7 +23,10 @@ def initial_sequence_with_gc_caps(secstruct, sequence_constraints, no_gccap):
 	pair_count = 0
 	gc_count = 0
 	for ii in range(0,n):
+		
 		if(sequence_constraints[ii] != "N"):
+			if (pairmap[ii] > ii):
+				pair_count+=1
 			continue
 		
 		if(pairmap[ii] > ii):
