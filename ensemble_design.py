@@ -304,7 +304,7 @@ def inverse_fold_whole(secstruct, constraints, score_func, score_cutoff, convent
 	flag = 0
 
 	for i in range(0, len(constraints)):
-		if constraints[i] != 'N':
+		if constraints[i] == 'N':
 			flag = 1
 			break
 
