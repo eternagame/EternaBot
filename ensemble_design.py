@@ -389,9 +389,9 @@ else:
 for pp in range(0,len(secstructs)):
 	outputs = []
 	print "\n\n======%s==========\n\n" % puzzle_titles[pp]
-	
+		
 	for ii in range(0,repeat):
-		print "CALCULATING " + str(ii)
+		print "CC %d" % ii
 		outputs.append((inverse_fold_whole(secstructs[pp], constraints[pp], ensemble.score, score_cutoff, op == "conventional")))
 
 	outputs = sorted(outputs, key=lambda output: output['end'][2]['finalscore'], reverse=True)
