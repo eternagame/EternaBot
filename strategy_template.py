@@ -96,7 +96,10 @@ class Strategy(json.JSONEncoder):
 			print "Failed to load kt score - score file does not exist"
 			return False
 
-	def get_normalization(self, params, strategy_name):
+	def get_normalization(self, params):
+		
+		strategy_name = self.author_ + "_" + self.title_
+		
 		fm = open("strategies/normalized/" + strategy_name + "_mean.txt", "r");
 		fs = open("strategies/normalized/" + strategy_name + "_stdev.txt", "r");
 
@@ -106,11 +109,11 @@ class Strategy(json.JSONEncoder):
 		fm.close()
 		fs.close()
 
-	def set_normalization(self, designs, params, strategy_name):
+	def set_normalization(self, designs, params):
 		scores = []
 		scoresum = 0
 		n = 0
-		
+	
 		for ii in range(0,len(designs)):
 			s = (self.score(designs[ii], params))
 			if(s <= eterna_utils.UNSCORABLE):
@@ -131,6 +134,8 @@ class Strategy(json.JSONEncoder):
 			stdev = stdev / float(n)
 		
 		stdev = math.sqrt(stdev)	
+		
+		strategy_name = self.author_ + "_" + self.title_ 
 		
 		fm = open("strategies/normalized/" + strategy_name + "_mean.txt", "w")
 		fs = open("strategies/normalized/" + strategy_name + "_stdev.txt", "w")

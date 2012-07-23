@@ -392,7 +392,6 @@ for pp in range(0,len(secstructs)):
 		
 	for ii in range(0,repeat):
 		outputs.append((inverse_fold_whole(secstructs[pp], constraints[pp], ensemble.score, score_cutoff, op == "conventional")))
-		outputs[ii]['end'][2]['finalscore'] += 100
 
 	outputs = sorted(outputs, key=lambda output: output['end'][2]['finalscore'], reverse=True)
 	
