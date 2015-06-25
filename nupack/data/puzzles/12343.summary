@@ -1,0 +1,33 @@
+% NUPACK 3.0
+% Program: design
+% Start time: Wed Jun 24 16:30:59 2015
+% Command: /afs/.ir/users/m/j/mjwu/private/das/EteRNABot/nupack/code/nupack3.0.5c-clean/bin/design -material rna1999 -prevent /afs/.ir/users/m/j/mjwu/private/das/EteRNABot/nupack/data/puzzles/12343.prevent /afs/.ir/users/m/j/mjwu/private/das/EteRNABot/nupack/data/puzzles/12343 %
+% Structure: (((((((.......)))))))
+% v(pi): 1
+% Parameters: RNA, 1999
+% Dangles setting: 1
+% Temperature (C): 37.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+% Init mode: RANDOM
+% M_UNFAVORABLE: 4.000000
+% M_REOPT: 10
+% M_LEAFOPT: 3
+% f_STOP: 0.010000
+% Minimum split helix: 4
+% Minimum leaf size: 20
+% Design mode: N
+%
+% Elapsed time: 0.112673
+% Root evaluation time: 0.001456
+%
+% CG fraction: 0.190476
+% Pattern violations: 0
+% Target free energy: -0.800000
+% Ensemble free energy: -1.099158
+%
+% Leaf sum: 2.862652
+% MFE defect: 0.000000
+% Probability: 0.479227
+% Ensemble defect: 2.862652
+UAUAUUACUCCCUUUAAUAUA

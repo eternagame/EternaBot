@@ -1,0 +1,6 @@
+306520: 2 GC pairs found, max 1
+307065: secondary structure not satisfied
+307188: Traceback (most recent call last):
+  File "/afs/.ir/users/m/j/mjwu/private/das/EteRNABot/nupack/code/get_sequence_info.py", line 27, in <module>
+    with open("%s/%s.summary" % (args.dir, args.id), 'r') as f:
+IOError: [Errno 2] No such file or directory: '../data/puzzles/307188.summary'
