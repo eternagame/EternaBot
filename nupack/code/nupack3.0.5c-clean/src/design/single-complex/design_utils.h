@@ -40,6 +40,7 @@
 #define baseN 0
 
 int newNucsComps[20];
+int wobbleComps[2];
 int nucArray[20][20];
 int convertBaseToInt[100];
 char convertIntToBase[20];

@@ -19,7 +19,7 @@ fi
 
 
 echo "getting puzzle $id"
-return=$(python $CODE_DIR/json_to_fold.py $id 2>&1)
+return=$(python $CODE_DIR/json_to_fold.py $id -d $DATA_DIR/puzzles 2>&1)
 if [[ -n ${return// } ]]; then
     echo "$id: $return" >> $DATA_DIR/not_done.txt
     echo $return
@@ -28,18 +28,25 @@ fi
 
 echo "designing rna"
 
-$NUPACKHOME/bin/design -material rna1999 -prevent $DATA_DIR/puzzles/$id".prevent" $DATA_DIR/puzzles/$id;
+i=0
 
-return=$(python $CODE_DIR/get_sequence_info.py $id 2>&1)
-if [[ -n ${return// } ]]; then
-    echo "$id: $return" >> $DATA_DIR/not_done.txt
-    echo $return
-    exit
-fi
+while [ $i -lt 10 ]; do
+    $NUPACKHOME/bin/design -material rna1999 -prevent $DATA_DIR/puzzles/$id".prevent" $DATA_DIR/puzzles/$id;
+    
+    return=$(python $CODE_DIR/get_sequence_info.py -d $DATA_DIR/puzzles -o $DATA_DIR/puzzles $id 2>&1)
+    if [[ -z ${return// } ]]; then
+        return=$(curl -s -X POST -b $CODE_DIR/cookiefile -d @$DATA_DIR/puzzles/$id.post http://eternagame.org/post/)
+        if [[ $return != *'"success":true'* ]]; then
+            grep -P -o '"error":"(.*?)"' <<< $return
+        fi
+        
+        echo $id >> $DATA_DIR/done.txt
+        exit
+    fi
+    ((i++))
+done
 
-return=$(curl -s -X POST -b $CODE_DIR/cookiefile -d @$DATA_DIR/puzzles/$id.post http://eternagame.org/post/)
-if [[ $return != *'"success":true'* ]]; then
-    grep -P -o '"error":"(.*?)"' <<< $return
-fi
+echo "$id: $return" >> $DATA_DIR/not_done.txt
+echo $return
 
-echo $id >> $DATA_DIR/done.txt
+

@@ -21,6 +21,9 @@ void loadNucNumbers(void) {
 	newNucsComps[BASE_H] = BASE_D;
 	newNucsComps[BASE_D] = BASE_H;
 
+    wobbleComps[BASE_U] = BASE_G;
+    wobbleComps[BASE_G] = BASE_U;
+
 	nucArray[BASE_A][BASE_A] = 1;
 	nucArray[BASE_C][BASE_C] = 1;
 	nucArray[BASE_G][BASE_G] = 1;
@@ -499,7 +502,7 @@ int fixSkeleton(int *skel, int *pairs, int length) {
 	}
 	skel[counter] = -1;
 	for (i = 0; i < counter; i++) {
-		if (pairs[i] >= 0 && skel[i] != newNucsComps[skel[pairs[i]]] && skel[i] != BASE_N && skel[pairs[i]] != BASE_N) {
+		if (pairs[i] >= 0 && skel[i] != newNucsComps[skel[pairs[i]]] && skel[i] != BASE_N && skel[pairs[i]] != BASE_N) { // && skel[i] != wobbleComps[skel[pairs[i]]]) {
 			fprintf(stderr, "ERROR IN CONSTRAINTS:\n %d at POS %d NOT COMPATIBLE WITH PAIR %d at POS %d\n", skel[i], i, skel[pairs[i]], pairs[i]);
 			exit(1);
 
@@ -512,7 +515,7 @@ int fixSkeleton(int *skel, int *pairs, int length) {
 				else if (skel[i] != BASE_N && skel[pairs[i]] == BASE_N) {
 					skel[pairs[i]] = newNucsComps[skel[i]];	
 				}
-				else if (skel[i] != newNucsComps[skel[pairs[i]]]) {
+				else if (skel[i] != newNucsComps[skel[pairs[i]]]) { // && skel[i] != wobbleComps[skel[pairs[i]]]) {
 					fprintf(stderr, "2 ERROR IN CONSTRAINTS:\n %d at POS %d NOT COMPATIBLE WITH PAIR %d at POS %d\n", skel[i], i, skel[pairs[i]], pairs[i]);
 					exit(1);	
 				}
