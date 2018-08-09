@@ -1,4 +1,4 @@
-from eternabot.eterna_utils import *
+from eternabot import eterna_utils
 from eternabot import strategy_template
 
 class Strategy(strategy_template.Strategy):
