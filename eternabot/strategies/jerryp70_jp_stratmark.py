@@ -1,6 +1,6 @@
 #by Chengfu chengfuc@andrew.cmu.edu date:6.11
-from eterna_utils import *
-import strategy_template
+from eternabot.eterna_utils import *
+from eternabot import strategy_template
 
 
 class Strategy(strategy_template.Strategy):

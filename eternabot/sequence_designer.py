@@ -29,7 +29,7 @@ class SequenceDesigner:
             'kkohli_test_by_kkohli']
 
         if op == "sparse":
-            weights_file_name = "no_validation_training/weights_sparse_5.overall.txt"
+            weights_file_name = "resources/no_validation_training/weights_sparse_5.overall.txt"
             weights_f = open(settings.base_dir + "/" + weights_file_name,"r")
             weights = []
             for line in weights_f:
@@ -56,5 +56,5 @@ class SequenceDesigner:
 if __name__ == "__main__":
     designer = SequenceDesigner()
     solutions = designer.design("(((....)))", "NNNNNNNNNN")
-    print solutions
+    print solutions[0]
 

@@ -35,13 +35,26 @@ def fold(seq, cotransc=False, constraint=False):
     else:
         options = ""
         input = ''.join(seq)
-    if cotransc:
+
+    """if cotransc:
         p = Popen([os.path.join(settings.VIENNA_DIR,'CoFold'), '--distAlpha', '0.5', '--distTau', '640', '--noPS', options], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
     elif '&' in seq:
         p = Popen([os.path.join(settings.VIENNA_DIR,'RNAcofold'), '-T','37.0', '-noPS', options], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
     else:
         p = Popen([os.path.join(settings.VIENNA_DIR,'RNAfold'), '-T','37.0', '-noPS', options], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
-    pair= p.communicate(input=input)[0]
+    pair= p.communicate(input=input)[0]"""
+
+    if cotransc:
+        p = Popen([settings.VIENNA_DIR + 'CoFold', '--distAlpha', '0.5', '--distTau', '640', '--noPS', options],
+                  stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+    elif '&' in seq:
+        p = Popen([settings.VIENNA_DIR + 'RNAcofold', '-T', '37.0'],
+                  stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+    else:
+        p = Popen([settings.VIENNA_DIR + 'RNAfold', '-T', '37.0'],
+                  stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+    pair = p.communicate(input=''.join(seq))[0]
+
     p.wait()
 
     # parse the result

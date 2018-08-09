@@ -1,8 +1,5 @@
-from eterna_utils import *
-import strategy_template
-import inv_utils
-import random
-import eterna_utils
+from eternabot.eterna_utils import *
+from eternabot import strategy_template
 
 class Strategy(strategy_template.Strategy):
 	def __init__(self):

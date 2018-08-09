@@ -1,5 +1,5 @@
-from eterna_utils import *
-import strategy_template
+from eternabot.eterna_utils import *
+from eternabot import strategy_template
 
 class Strategy(strategy_template.Strategy):
 	SHIFT_LIMIT = 3
