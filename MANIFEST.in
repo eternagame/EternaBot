@@ -3,9 +3,9 @@ include eternabot/*.csv
 include eternabot/*.txt
 include eternabot/*.js
 include eternabot/*.sh
-include eternabot/straegies/normalizd/*
-include eternabot/straegies/outputs/*
-include eternabot/straegies/params/*
-include eternabot/straegies/params_bak/*
-include eternabot/straegies/*.txt
-recursive-include eternabot/straegies/txt_bak/*
+include eternabot/strategies/normalizd/*
+include eternabot/strategies/outputs/*
+include eternabot/strategies/params/*
+include eternabot/strategies/params_bak/*
+include eternabot/strategies/*.txt
+recursive-include eternabot/strategies/txt_bak/*
