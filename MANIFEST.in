@@ -1,11 +1,11 @@
 recursive-include eternabot/resources *
-include *.csv
-include *.txt
-include *.js
-include *.sh
-include strategies/normalized/*
-include strategies/outputs/*
-include strategies/params/*
-include strategies/params_bak/*
-include strategies/*.txt
-recursive-include strategies/txt_bak/*
+include eternabot/*.csv
+include eternabot/*.txt
+include eternabot/*.js
+include eternabot/*.sh
+include eternabot/strategies/normalized/*
+include eternabot/strategies/outputs/*
+include eternabot/strategies/params/*
+include eternabot/strategies/params_bak/*
+include eternabot/strategies/*.txt
+recursive-include eternabot/strategies/txt_bak *
