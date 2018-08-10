@@ -2,14 +2,14 @@ import os.path
 
 from setuptools import setup, find_packages
 
-root_path = os.path.abspath(os.path.join(__file__, '..'))
+root_path = os.path.abspath(os.path.join(__file__, '..', 'eternabot'))
 
 setup(
 	name='eternabot',
 	version='1.0',
 	url='https://github.com/eternagame/eternabot/',
 	packages=find_packages('eternabot'),
-	package_dir={'': 'eternabot'},
+	package_dir={'eternabot': root_path},
 	include_package_data=True,
 	#python_requires='>2.6,<3',
 	install_requires=[
