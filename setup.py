@@ -14,6 +14,7 @@ setup(
         'simplejson>=3.16.0',
         'matplotlib>=2.2.2',
         'networkx>=2.1',
-        'numpy>=1.15.0'
+        'numpy>=1.15.0',
+	'httplib2>=0.11.3'
     ],
 )
