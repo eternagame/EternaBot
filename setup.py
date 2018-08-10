@@ -9,8 +9,8 @@ setup(
 	version='1.0',
 	url='https://github.com/eternagame/eternabot/',
 	packages=find_packages('eternabot'),
-	package_dir={'': 'eternabot'},,
-	include_package_data=True 
+	package_dir={'': 'eternabot'},
+	include_package_data=True,
 	#python_requires='>2.6,<3',
 	install_requires=[
         'scipy>=1.1.0',
