@@ -1,0 +1,11 @@
+recursive-include eternabot/resources *
+include eternabot/*.csv
+include eternabot/*.txt
+include eternabot/*.js
+include eternabot/*.sh
+include eternabt/straegies/normalizd/*
+include eternabt/straegies/outputs/*
+include eternabt/straegies/params/*
+include eternabt/straegies/params_bak/*
+include eternabt/straegies/*.txt
+recursive-include eternabt/straegies/txt_bak/*

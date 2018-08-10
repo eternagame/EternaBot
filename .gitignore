@@ -59,6 +59,7 @@ target/
 *.txt
 *.fold
 *.in
+!MANIFEST.in
 *.ocx*
 *.eq
 *.con
