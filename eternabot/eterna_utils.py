@@ -234,6 +234,7 @@ def bp_distance(secstruct1, secstruct2):
     bp distance between structures
     """
     # ensure that secondary structures are the same length
+
     if(len(secstruct1) != len(secstruct2)):
         print "SS1 and SS2 lengths don't match"
         sys.exit(0)

@@ -164,7 +164,7 @@ def get_sequence_string(arr):
     
     return string
 
-def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cutoff):
+def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cutoff, contrafold=False):
     """
     args:
     secstruct contains secondary structure
@@ -208,7 +208,7 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
     
     # get information about current sequence    
     sequence = start_sequence
-    native = inv_utils.fold(sequence)[0]
+    native = inv_utils.fold(sequence, contrafold=contrafold)[0]
     bp_distance = eterna_utils.bp_distance(secstruct,native)
     native_pairmap = eterna_utils.get_pairmap_from_secstruct(native)
     design = eterna_utils.get_design_from_sequence(sequence,secstruct)
@@ -253,7 +253,7 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
                         mut_array[ii] = bases[jj]
                         
                         mut_sequence = get_sequence_string(mut_array)
-                        mut_native = inv_utils.fold(mut_sequence)[0]
+                        mut_native = inv_utils.fold(mut_sequence, contrafold=contrafold)[0]
                         mut_bp_distance = eterna_utils.bp_distance(secstruct,mut_native)
                         mut_design = eterna_utils.get_design_from_sequence(mut_sequence,secstruct)
                         mut_score = scoring_func(design)
@@ -290,7 +290,7 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
                         mut_array[target_pairmap[ii]] = pairs[jj][1]
                         
                         mut_sequence = get_sequence_string(mut_array)
-                        mut_native = inv_utils.fold(mut_sequence)[0]
+                        mut_native = inv_utils.fold(mut_sequence, contrafold=contrafold)[0]
                         mut_bp_distance = eterna_utils.bp_distance(secstruct,mut_native)
                         mut_design = eterna_utils.get_design_from_sequence(mut_sequence,secstruct)
                         mut_score = scoring_func(design)
@@ -351,7 +351,7 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
                     mut_array[rindex] = get_random_base()
             
             sequence = get_sequence_string(mut_array)
-            native = inv_utils.fold(sequence)[0]
+            native = inv_utils.fold(sequence, contrafold=contrafold)[0]
             bp_distance = eterna_utils.bp_distance(secstruct,native)
             design = eterna_utils.get_design_from_sequence(sequence,secstruct)
             design_score = scoring_func(design)
@@ -368,7 +368,7 @@ def inverse_fold(secstruct, start_sequence, constraints, scoring_func, score_cut
     return [best_sequence, best_bp_distance, best_design_score['finalscore'], best_design_score]                
     
     
-def inverse_fold_whole(secstruct, constraints, score_func, score_cutoff, conventional):
+def inverse_fold_whole(secstruct, constraints, score_func, score_cutoff, conventional, contrafold=False):
     """
     args:
     secstruct contains secondary structure
@@ -384,7 +384,7 @@ def inverse_fold_whole(secstruct, constraints, score_func, score_cutoff, convent
     # initialize sequence and corresponding folds/bp distances/designs
     start_sequence = initial_sequence_with_gc_caps(secstruct, constraints, conventional)
     
-    start_native = inv_utils.fold(start_sequence)[0]
+    start_native = inv_utils.fold(start_sequence, contrafold=contrafold)[0]
     start_bp = eterna_utils.bp_distance(start_native,secstruct)
     start_design = eterna_utils.get_design_from_sequence(start_sequence, secstruct)
 
@@ -407,17 +407,17 @@ def inverse_fold_whole(secstruct, constraints, score_func, score_cutoff, convent
         start_sequence_array = get_sequence_array(start_sequence)
         elements = eterna_utils.get_rna_elements_from_secstruct(secstruct)
         root = elements[0]
-        inverse_fold_recursive(root,secstruct,start_sequence_array, constraints,score_func,score_cutoff)
+        inverse_fold_recursive(root,secstruct,start_sequence_array, constraints,score_func,score_cutoff, contrafold=contrafold)
         
         end_sequence = get_sequence_string(start_sequence_array)
         end_design = eterna_utils.get_design_from_sequence(end_sequence, secstruct)
-        end_native = inv_utils.fold(end_sequence)[0]
+        end_native = inv_utils.fold(end_sequence, contrafold=contrafold)[0]
         end_bp = eterna_utils.bp_distance(end_native,secstruct)
 
         res['end'] = [end_sequence, end_bp, score_func(end_design)]
     return res
     
-def inverse_fold_recursive(root,secstruct,sequence_array,constraints,score_func,score_cutoff):
+def inverse_fold_recursive(root,secstruct,sequence_array,constraints,score_func,score_cutoff, contrafold=False):
     """
     args:
     root is the root element
@@ -438,7 +438,7 @@ def inverse_fold_recursive(root,secstruct,sequence_array,constraints,score_func,
 
     # run this recursively over all children of each element    
     for ii in range(0, len(root.children_)):
-        inverse_fold_recursive(root.children_[ii],secstruct, sequence_array, constraints, score_func,score_cutoff)
+        inverse_fold_recursive(root.children_[ii],secstruct, sequence_array, constraints,score_func,score_cutoff, contrafold=contrafold)
     
     # do this for each element
     sequence = get_sequence_string(sequence_array)
@@ -450,7 +450,7 @@ def inverse_fold_recursive(root,secstruct,sequence_array,constraints,score_func,
         
     #print "RR %d %d %s" % (root_start_index, root_end_index, str(root.indices_))
 
-    res = inverse_fold(secstruct[root_start_index:root_end_index+1], sequence[root_start_index:root_end_index+1], constraints[root_start_index:root_end_index+1], score_func, score_cutoff)
+    res = inverse_fold(secstruct[root_start_index:root_end_index+1],sequence[root_start_index:root_end_index+1], constraints[root_start_index:root_end_index+1],score_func, score_cutoff, contrafold=contrafold)
     res_sequence = res[0]
     
     for ii in range(root_start_index, root_end_index+1):

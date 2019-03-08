@@ -44,7 +44,7 @@ class SequenceDesigner:
 
         self.ensemble = ensemble_utils.Ensemble("sparse", strategy_names, weights)
 
-    def design(self, structure, sequence, count=1):
+    def design(self, structure, sequence, contrafold=False, count=1):
         score_cutoff = 90
         if   len(structure) <= 50:
             score_cutoff = 70
@@ -55,7 +55,8 @@ class SequenceDesigner:
         for i in range(count):
             res = ensemble_design.inverse_fold_whole(structure, sequence,
                                                      self.ensemble.score,
-                                                     score_cutoff, "conventional")
+                                                     score_cutoff, "conventional",
+                                                     contrafold=contrafold)
 
             score = res['end'][2]['finalscore']
             seq   = res['end'][0]
@@ -65,6 +66,6 @@ class SequenceDesigner:
 
 if __name__ == "__main__":
     designer = SequenceDesigner()
-    solutions = designer.design("(((....)))", "NNNNNNNNNN")
+    solutions = designer.design("(((....)))", "NNNNNNNNNN", contrafold=True)
     print solutions[0].sequence, solutions[0].score
 

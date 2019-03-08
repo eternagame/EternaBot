@@ -197,7 +197,7 @@ def post_solution(puzzleid, title, sequence, score):
                 'title': title,
                 'body': 'eternabot solution, score %s' % score,
                 'sequence': sequence,
-                'energy': fold[1],
+                'energy': fold[1], # TODO: incorrect for contrafold
                 'gc': design['gc'],
                 'gu': design['gu'],
                 'ua': design['ua'],

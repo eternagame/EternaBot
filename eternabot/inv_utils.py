@@ -18,7 +18,7 @@ BASES = ['A','U','G','C']
 #@param seq:sequence
 #@return: [parenthesis notation, energy]
 
-def fold(seq, cotransc=False, constraint=False):
+def fold(seq, cotransc=False, constraint=False, contrafold=False):
     """
     folds sequence using Vienna
 
@@ -35,6 +35,9 @@ def fold(seq, cotransc=False, constraint=False):
     else:
         options = ""
         input = ''.join(seq)
+
+    if contrafold:
+        return contra_fold(seq)
 
     """if cotransc:
         p = Popen([os.path.join(settings.VIENNA_DIR,'CoFold'), '--distAlpha', '0.5', '--distTau', '640', '--noPS', options], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
@@ -59,7 +62,31 @@ def fold(seq, cotransc=False, constraint=False):
 
     # parse the result
     toks = re.search('([AUGC]+)\s*([\.\)\(]+)\s+\(\s*([-0-9\.]+)\s*\)', pair)
+    print [toks.group(2), float(toks.group(3))]
     return [toks.group(2), float(toks.group(3))]
+
+def contra_fold(seq):
+    """
+    folds sequence using Contrafold
+
+    args:
+    seq is the sequence string
+
+    returns:
+    secondary structure
+    """
+    contrafold_fname = 'contrafold_tmp.fasta'
+    with open(contrafold_fname,'w') as f:
+        f.write(seq)
+
+    p = Popen([settings.CONTRA_DIR+'contrafold', 'predict', contrafold_fname],stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+    stdout, stderr = p.communicate()
+
+    p.wait()
+    struct = stdout.decode('utf-8').split('\n')[-2]
+    print struct
+    # parse the result
+    return [struct, '' ]
 
 def nupack_fold(seq, oligo_conc, bpp = False):
     """
