@@ -62,7 +62,6 @@ def fold(seq, cotransc=False, constraint=False, contrafold=False):
 
     # parse the result
     toks = re.search('([AUGC]+)\s*([\.\)\(]+)\s+\(\s*([-0-9\.]+)\s*\)', pair)
-    print [toks.group(2), float(toks.group(3))]
     return [toks.group(2), float(toks.group(3))]
 
 def contra_fold(seq):
@@ -84,8 +83,8 @@ def contra_fold(seq):
 
     p.wait()
     struct = stdout.decode('utf-8').split('\n')[-2]
-    print struct
     # parse the result
+    os.remove(contrafold_fname)
     return [struct, '' ]
 
 def nupack_fold(seq, oligo_conc, bpp = False):
